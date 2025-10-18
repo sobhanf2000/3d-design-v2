@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bt5snqfb8avij"]
+
+[ext_resource type="PackedScene" uid="uid://bknuhb5iifq1" path="res://Assets/Crypt/crypt.fbx" id="1_7q7q3"]
+
+[node name="staticcrypt" type="StaticBody3D"]
+
+[node name="crypt" parent="." instance=ExtResource("1_7q7q3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 1)
