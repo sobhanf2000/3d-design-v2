@@ -1,6 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://b2dk25e60vth7"]
+[gd_scene load_steps=9 format=3 uid="uid://b2dk25e60vth7"]
 
-[ext_resource type="Script" uid="uid://b63r3ouocapn" path="res://Scripts/character_body_3d.gd" id="1_v0iea"]
+[ext_resource type="Script" uid="uid://cx6rgqoa7tch5" path="res://Scripts/StaticMachine/Player/player.gd" id="1_fkybt"]
+[ext_resource type="Script" uid="uid://bmssyhs4537ya" path="res://Scripts/StaticMachine/Player/state_machine.gd" id="2_fkybt"]
+[ext_resource type="Script" uid="uid://mbkcbb2ie1tw" path="res://Scripts/StaticMachine/Player/move_component.gd" id="2_x3wgy"]
+[ext_resource type="Script" uid="uid://cb0ggjbdkx16r" path="res://Scripts/StaticMachine/Player/idle_state.gd" id="3_x3wgy"]
+[ext_resource type="Script" uid="uid://bd0w18ax1kvxd" path="res://Scripts/StaticMachine/Player/move_state.gd" id="4_3smsa"]
+[ext_resource type="Script" uid="uid://q8sxi4hexnvc" path="res://Scripts/StaticMachine/Player/jump_state.gd" id="5_8erm5"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_cvnsp"]
 
@@ -10,7 +15,7 @@ points = PackedVector3Array(-0.125207, -0.532801, -0.480507, 0.0227831, 0.47607,
 [node name="Player" type="CharacterBody3D"]
 transform = Transform3D(2.01, 0, 0, 0, 2.01, 0, 0, 0, 2.01, 0, 0, 0)
 floor_max_angle = 1.0471976
-script = ExtResource("1_v0iea")
+script = ExtResource("1_fkybt")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_cvnsp")
@@ -22,3 +27,24 @@ shape = SubResource("ConvexPolygonShape3D_6t5aa")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.625549, 0)
 
 [node name="Camera" type="Camera3D" parent="Head"]
+
+[node name="Move_Component" type="Node" parent="."]
+script = ExtResource("2_x3wgy")
+
+[node name="State_Machine" type="Node" parent="." node_paths=PackedStringArray("starter_state")]
+script = ExtResource("2_fkybt")
+starter_state = NodePath("Idle_State")
+
+[node name="Idle_State" type="Node" parent="State_Machine" node_paths=PackedStringArray("move_state", "jump_state")]
+script = ExtResource("3_x3wgy")
+move_state = NodePath("../Move_State")
+jump_state = NodePath("../Jump_State")
+
+[node name="Move_State" type="Node" parent="State_Machine" node_paths=PackedStringArray("idle_state", "jump_state")]
+script = ExtResource("4_3smsa")
+idle_state = NodePath("../Idle_State")
+jump_state = NodePath("../Jump_State")
+move_speed = 15.0
+
+[node name="Jump_State" type="Node" parent="State_Machine"]
+script = ExtResource("5_8erm5")
